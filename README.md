@@ -27,7 +27,7 @@
 
 一句话：**本项目只摘了官方 MCP 里“蓝湖设计稿读取和切图”相关能力，并额外支持 PS 上传稿。**
 
-## 快速开始
+## 让 AI 帮你安装
 
 如果你想让 AI 帮你安装，可以直接使用这段提示词：
 
@@ -44,6 +44,17 @@ https://github.com/xuwenxindeai/lanhu-design-reader
 安装时带 MCP 依赖：pip install -e .[mcp]
 然后帮我配置 Cursor MCP，使用 lh-design-mcp。
 ```
+
+## 应该选哪种用法？
+
+大多数情况下只需要选一种：
+
+| 场景 | 推荐方式 |
+| --- | --- |
+| 只是想让 AI 读取蓝湖、下载切图 | 用 CLI：`lh-design` |
+| 经常在 Cursor 里做蓝湖 UI 还原 | 先装 CLI，再安装 Cursor Skill |
+| 想在 Cursor 里像工具一样直接调用 | 配置 Cursor MCP |
+| 不确定选哪个 | 先用 CLI：`lh-design` |
 
 ## 安装
 
@@ -139,7 +150,7 @@ lh-design download-slices '<蓝湖URL>' --image-id yyy --scale android_xxxhdpi -
 
 ## Cursor 里怎么用？
 
-本项目支持三种方式。
+下面三种方式**任选一种**即可。第一次使用建议先选“方式一：CLI”，最容易安装和排查。
 
 ### 方式一：让 Cursor AI 调 CLI
 
