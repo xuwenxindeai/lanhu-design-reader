@@ -1,6 +1,6 @@
 # Lanhu Design Reader
 
-一个给 AI / 同事 / 脚本使用的蓝湖设计稿读取工具。
+一个给 AI Agent、开发者和自动化脚本使用的蓝湖设计稿读取工具。
 
 它从 [dsphper/lanhu-mcp](https://github.com/dsphper/lanhu-mcp) 里单独摘出了**设计稿读取和切图导出**这部分能力，并做成更轻量的 CLI / Cursor Skill / Cursor MCP。
 
@@ -27,9 +27,9 @@
 
 一句话：**本项目只摘了官方 MCP 里“蓝湖设计稿读取和切图”相关能力，并额外支持 PS 上传稿。**
 
-## 给同事的最简单说法
+## 快速开始
 
-让 AI 执行这句话：
+如果你想让 AI 帮你安装，可以直接使用这段提示词：
 
 ```text
 帮我克隆并安装这个蓝湖设计稿读取工具：
@@ -37,7 +37,7 @@ https://github.com/xuwenxindeai/lanhu-design-reader
 安装后确认 lh-design 命令可用，并指导我配置 LANHU_COOKIE。
 ```
 
-如果要接入 Cursor MCP，让 AI 执行：
+如果你想接入 Cursor MCP，可以使用：
 
 ```text
 帮我克隆并安装 https://github.com/xuwenxindeai/lanhu-design-reader
@@ -108,7 +108,7 @@ lh-design slices 'https://lanhuapp.com/web/#/item/project/stage?tid=xxx&pid=xxx'
 
 ### 3. 下载 Web 切图
 
-Web 同学用通用 `1x / 2x / 3x`：
+Web 资源使用通用 `1x / 2x / 3x`：
 
 ```bash
 lh-design download-slices '<蓝湖URL>' --image-id yyy --scale 1x -o ./web_1x
@@ -118,7 +118,7 @@ lh-design download-slices '<蓝湖URL>' --image-id yyy --scale 3x -o ./web_3x
 
 ### 4. 下载 iOS 切图
 
-iOS 同学用 `ios_2x / ios_3x`：
+iOS 资源使用 `ios_2x / ios_3x`：
 
 ```bash
 lh-design download-slices '<蓝湖URL>' --image-id yyy --scale ios_2x -o ./ios_2x
@@ -127,7 +127,7 @@ lh-design download-slices '<蓝湖URL>' --image-id yyy --scale ios_3x -o ./ios_3
 
 ### 5. 下载 Android 切图
 
-Android 同学用 `android_*`：
+Android 资源使用 `android_*`：
 
 ```bash
 lh-design download-slices '<蓝湖URL>' --image-id yyy --scale android_mdpi -o ./drawable-mdpi
@@ -152,7 +152,7 @@ image_id 是 yyy
 我是 iOS，请下载 ios_2x 和 ios_3x。
 ```
 
-Web 同学说：
+Web 场景可以说：
 
 ```text
 用 lh-design 读取这个蓝湖设计稿的切图：
@@ -161,7 +161,7 @@ image_id 是 yyy
 我是 Web，请下载 1x、2x、3x。
 ```
 
-Android 同学说：
+Android 场景可以说：
 
 ```text
 用 lh-design 读取这个蓝湖设计稿的切图：
@@ -191,7 +191,7 @@ cp cursor-skills/lanhu-design/SKILL.md ~/.cursor/skills/lanhu-design/SKILL.md
 
 ### 方式三：配置 Cursor MCP
 
-这种方式配置好以后，Cursor 会自动启动工具；同事不需要手动输入一长串启动命令。
+这种方式配置好以后，Cursor 会自动启动工具；使用者不需要手动输入一长串启动命令。
 
 #### 第一步：安装 MCP 版本
 
@@ -253,7 +253,7 @@ image_id 是 yyy，我要 iOS @2x/@3x。
 
 #### 高级用法：HTTP 模式（不懂可以忽略）
 
-普通同事不用这一段。只有你想手动启动一个本地 MCP 服务时才需要。
+普通使用不需要这一段。只有你想手动启动一个本地 MCP 服务时才需要。
 
 先启动服务：
 
