@@ -9,10 +9,35 @@ import httpx
 
 try:
     from dotenv import load_dotenv
-
-    load_dotenv(override=False)
 except ImportError:
-    pass
+    load_dotenv = None
+
+
+def _load_env_files() -> None:
+    """Load local and user-level env files without overriding shell variables."""
+    if load_dotenv is None:
+        return
+
+    repo_root = Path(__file__).resolve().parents[2]
+    candidates = [
+        os.getenv("LANHU_DESIGN_READER_ENV"),
+        Path.cwd() / ".env",
+        Path.home() / ".lanhu-design-reader" / ".env",
+        repo_root / ".env",
+    ]
+
+    seen: set[Path] = set()
+    for candidate in candidates:
+        if not candidate:
+            continue
+        path = Path(candidate).expanduser()
+        if path in seen or not path.exists():
+            continue
+        load_dotenv(path, override=False)
+        seen.add(path)
+
+
+_load_env_files()
 
 
 BASE_URL = "https://lanhuapp.com"

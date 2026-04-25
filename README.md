@@ -27,22 +27,29 @@
 
 一句话：**本项目只摘了官方 MCP 里“蓝湖设计稿读取和切图”相关能力，并额外支持 PS 上传稿。**
 
-## 让 AI 帮你安装
+## 让 Cursor / AI 帮你安装
 
-如果你想让 AI 帮你安装，可以直接使用这段提示词：
+如果你想让 Cursor 或其他 AI 帮你安装，可以直接使用这段提示词：
 
 ```text
-帮我克隆并安装这个蓝湖设计稿读取工具：
-https://github.com/xuwenxindeai/lanhu-design-reader
-安装后确认 lh-design 命令可用，并指导我配置 LANHU_COOKIE。
+请使用官方 install.sh 安装 lanhu-design-reader：
+curl -fsSL https://raw.githubusercontent.com/xuwenxindeai/lanhu-design-reader/main/install.sh | bash
+
+要求：
+1. 不要克隆到当前业务工程目录。
+2. 默认安装到用户目录 ~/.lanhu-design-reader。
+3. 命令入口放到 ~/.local/bin/lh-design。
+4. Cookie 配置放到 ~/.lanhu-design-reader/.env。
+5. 安装后确认 lh-design --help 可用，并指导我配置 LANHU_COOKIE。
 ```
 
 如果你想接入 Cursor MCP，可以使用：
 
 ```text
-帮我克隆并安装 https://github.com/xuwenxindeai/lanhu-design-reader
-安装时带 MCP 依赖：pip install -e .[mcp]
-然后帮我配置 Cursor MCP，使用 lh-design-mcp。
+请使用官方 install.sh 安装 lanhu-design-reader，并带 MCP 依赖：
+curl -fsSL https://raw.githubusercontent.com/xuwenxindeai/lanhu-design-reader/main/install.sh | INSTALL_MCP=1 bash
+
+安装后帮我配置 Cursor MCP，使用 ~/.local/bin/lh-design-mcp。
 ```
 
 ## 应该选哪种用法？
@@ -58,18 +65,60 @@ https://github.com/xuwenxindeai/lanhu-design-reader
 
 ## 安装
 
+推荐安装到用户级目录，不污染业务工程：
+
 ```bash
-git clone https://github.com/xuwenxindeai/lanhu-design-reader.git
-cd lanhu-design-reader
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -e .
+curl -fsSL https://raw.githubusercontent.com/xuwenxindeai/lanhu-design-reader/main/install.sh | bash
+```
+
+安装后会使用这些路径：
+
+```text
+源码：~/.lanhu-design-reader/src
+虚拟环境：~/.lanhu-design-reader/venv
+配置：~/.lanhu-design-reader/.env
+命令：~/.local/bin/lh-design
+```
+
+如果你想先看脚本再执行：
+
+```bash
+curl -fsSL -o install.sh https://raw.githubusercontent.com/xuwenxindeai/lanhu-design-reader/main/install.sh
+bash install.sh
+```
+
+如果系统默认 `python3` 低于 3.10，可以指定 Python：
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/xuwenxindeai/lanhu-design-reader/main/install.sh | PYTHON_BIN=python3.12 bash
+```
+
+如果要安装 Cursor MCP 依赖：
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/xuwenxindeai/lanhu-design-reader/main/install.sh | INSTALL_MCP=1 bash
+lh-design-mcp --help
 ```
 
 安装后验证：
 
 ```bash
 lh-design --help
+```
+
+### 手动安装
+
+如果你不想使用一键脚本，可以手动安装：
+
+```bash
+mkdir -p ~/.lanhu-design-reader
+git clone https://github.com/xuwenxindeai/lanhu-design-reader.git ~/.lanhu-design-reader/src
+cd ~/.lanhu-design-reader/src
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -e .
+mkdir -p ~/.local/bin
+ln -sf ~/.lanhu-design-reader/src/.venv/bin/lh-design ~/.local/bin/lh-design
 ```
 
 如果要用 Cursor MCP：
@@ -89,10 +138,16 @@ lh-design-mcp --help
 export LANHU_COOKIE='你的蓝湖 Cookie'
 ```
 
-长期配置可以写到 `.env`：
+长期配置建议写到用户级配置：
 
 ```env
 LANHU_COOKIE=你的蓝湖 Cookie
+```
+
+配置文件位置：
+
+```text
+~/.lanhu-design-reader/.env
 ```
 
 如果要读取 DDS schema，且 DDS 需要单独 cookie：
@@ -100,6 +155,13 @@ LANHU_COOKIE=你的蓝湖 Cookie
 ```env
 DDS_COOKIE=你的 DDS Cookie
 ```
+
+配置读取优先级：
+
+1. 当前 shell 里的 `LANHU_COOKIE` / `DDS_COOKIE`
+2. 当前目录的 `.env`
+3. `~/.lanhu-design-reader/.env`
+4. 源码目录的 `.env`
 
 ## 日常使用：CLI
 
@@ -207,27 +269,16 @@ cp cursor-skills/lanhu-design/SKILL.md ~/.cursor/skills/lanhu-design/SKILL.md
 #### 第一步：安装 MCP 版本
 
 ```bash
-pip install -e .[mcp]
+curl -fsSL https://raw.githubusercontent.com/xuwenxindeai/lanhu-design-reader/main/install.sh | INSTALL_MCP=1 bash
+lh-design-mcp --help
 ```
 
-#### 第二步：找到 `lh-design-mcp` 的真实路径
+#### 第二步：确认 `lh-design-mcp` 路径
 
-在安装目录执行：
+默认命令路径是：
 
 ```bash
-pwd
-```
-
-假设输出是：
-
-```text
-/Users/zhangsan/work/lanhu-design-reader
-```
-
-那 MCP 命令路径就是：
-
-```text
-/Users/zhangsan/work/lanhu-design-reader/.venv/bin/lh-design-mcp
+which lh-design-mcp
 ```
 
 #### 第三步：配置 Cursor MCP
@@ -238,20 +289,16 @@ pwd
 {
   "mcpServers": {
     "lanhu-design-reader": {
-      "command": "/absolute/path/to/lanhu-design-reader/.venv/bin/lh-design-mcp",
-      "args": [],
-      "env": {
-        "LANHU_COOKIE": "your_lanhu_cookie_here"
-      }
+      "command": "/Users/你的用户名/.local/bin/lh-design-mcp",
+      "args": []
     }
   }
 }
 ```
 
-需要替换两处：
+需要替换一处：
 
-- `/absolute/path/to/lanhu-design-reader`：换成你电脑上的项目路径
-- `your_lanhu_cookie_here`：换成你的蓝湖 Cookie
+- `/Users/你的用户名/.local/bin/lh-design-mcp`：换成 `which lh-design-mcp` 的输出
 
 配置好后，重启 Cursor 或刷新 MCP。
 
