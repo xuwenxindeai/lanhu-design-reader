@@ -191,15 +191,37 @@ cp cursor-skills/lanhu-design/SKILL.md ~/.cursor/skills/lanhu-design/SKILL.md
 
 ### 方式三：配置 Cursor MCP
 
-安装 MCP 依赖：
+这种方式配置好以后，Cursor 会自动启动工具；同事不需要手动输入一长串启动命令。
+
+#### 第一步：安装 MCP 版本
 
 ```bash
 pip install -e .[mcp]
 ```
 
-#### 推荐：stdio 配置
+#### 第二步：找到 `lh-design-mcp` 的真实路径
 
-Cursor MCP 配置示例：
+在安装目录执行：
+
+```bash
+pwd
+```
+
+假设输出是：
+
+```text
+/Users/zhangsan/work/lanhu-design-reader
+```
+
+那 MCP 命令路径就是：
+
+```text
+/Users/zhangsan/work/lanhu-design-reader/.venv/bin/lh-design-mcp
+```
+
+#### 第三步：配置 Cursor MCP
+
+把下面配置加到 Cursor 的 MCP 配置里：
 
 ```json
 {
@@ -215,17 +237,31 @@ Cursor MCP 配置示例：
 }
 ```
 
-把 `/absolute/path/to/lanhu-design-reader` 换成你电脑上的真实路径。
+需要替换两处：
 
-#### 可选：HTTP 配置
+- `/absolute/path/to/lanhu-design-reader`：换成你电脑上的项目路径
+- `your_lanhu_cookie_here`：换成你的蓝湖 Cookie
+
+配置好后，重启 Cursor 或刷新 MCP。
+
+之后可以直接问 Cursor：
+
+```text
+用 lanhu-design-reader 读取这个蓝湖设计稿的切图：<蓝湖URL>
+image_id 是 yyy，我要 iOS @2x/@3x。
+```
+
+#### 高级用法：HTTP 模式（不懂可以忽略）
+
+普通同事不用这一段。只有你想手动启动一个本地 MCP 服务时才需要。
 
 先启动服务：
 
 ```bash
-LANHU_COOKIE='你的蓝湖 Cookie' lh-design-mcp --transport http --host 127.0.0.1 --port 8001
+LANHU_COOKIE='这里填你的蓝湖 Cookie' lh-design-mcp --transport http --host 127.0.0.1 --port 8001
 ```
 
-Cursor MCP 配置：
+再把 Cursor MCP 配成：
 
 ```json
 {
