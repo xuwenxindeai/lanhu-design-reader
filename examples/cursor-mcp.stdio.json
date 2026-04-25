@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "lanhu-design-reader": {
+      "command": "/absolute/path/to/lanhu-design-reader/.venv/bin/lh-design-mcp",
+      "args": [],
+      "env": {
+        "LANHU_COOKIE": "your_lanhu_cookie_here"
+      }
+    }
+  }
+}

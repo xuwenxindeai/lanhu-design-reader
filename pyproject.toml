@@ -13,8 +13,15 @@ dependencies = [
     "python-dotenv>=1.0.0",
 ]
 
+[project.optional-dependencies]
+mcp = [
+    "fastmcp>=0.2.0",
+]
+
 [project.scripts]
 lanhu-design-reader = "lanhu_design_reader.cli:main"
+lh-design = "lanhu_design_reader.cli:main"
+lh-design-mcp = "lanhu_design_reader.mcp_server:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

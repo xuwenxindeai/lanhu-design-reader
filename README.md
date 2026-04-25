@@ -18,9 +18,17 @@
 
 ```bash
 cd /Users/xuwenxin/Desktop/work/meishubao/lanhu-design-reader
-python -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate
 pip install -e .
+```
+
+安装后推荐使用短命令 `lh-design`；长命令 `lanhu-design-reader` 也保留可用。
+
+如果要接入 Cursor MCP，也安装 MCP 依赖：
+
+```bash
+pip install -e .[mcp]
 ```
 
 ## 鉴权
@@ -42,32 +50,132 @@ export DDS_COOKIE='你的 DDS Cookie'
 列出设计稿：
 
 ```bash
-lanhu-design-reader designs 'https://lanhuapp.com/web/#/item/project/stage?tid=xxx&pid=xxx'
+lh-design designs 'https://lanhuapp.com/web/#/item/project/stage?tid=xxx&pid=xxx'
 ```
 
 读取设计稿原始 JSON：
 
 ```bash
-lanhu-design-reader sketch 'https://lanhuapp.com/web/#/item/project/stage?tid=xxx&pid=xxx&image_id=yyy' -o sketch.json
+lh-design sketch 'https://lanhuapp.com/web/#/item/project/stage?tid=xxx&pid=xxx&image_id=yyy' -o sketch.json
 ```
 
 读取切图信息：
 
 ```bash
-lanhu-design-reader slices 'https://lanhuapp.com/web/#/item/project/stage?tid=xxx&pid=xxx' --image-id yyy -o slices.json
+lh-design slices 'https://lanhuapp.com/web/#/item/project/stage?tid=xxx&pid=xxx' --image-id yyy -o slices.json
 ```
 
-下载 iOS @2x 切图：
+### Web 同学
+
+Web 资源使用通用 `1x / 2x / 3x`：
 
 ```bash
-lanhu-design-reader download-slices 'https://lanhuapp.com/web/#/item/project/stage?tid=xxx&pid=xxx' --image-id yyy --scale ios_2x -o ./slices_ios_2x
+lh-design download-slices 'https://lanhuapp.com/web/#/item/project/stage?tid=xxx&pid=xxx' --image-id yyy --scale 1x -o ./web_1x
+lh-design download-slices 'https://lanhuapp.com/web/#/item/project/stage?tid=xxx&pid=xxx' --image-id yyy --scale 2x -o ./web_2x
+lh-design download-slices 'https://lanhuapp.com/web/#/item/project/stage?tid=xxx&pid=xxx' --image-id yyy --scale 3x -o ./web_3x
 ```
 
-下载 Android xhdpi 切图：
+### iOS 同学
+
+iOS 资源使用 `ios_2x / ios_3x`：
 
 ```bash
-lanhu-design-reader download-slices 'https://lanhuapp.com/web/#/item/project/stage?tid=xxx&pid=xxx' --image-id yyy --scale android_xhdpi -o ./slices_android_xhdpi
+lh-design download-slices 'https://lanhuapp.com/web/#/item/project/stage?tid=xxx&pid=xxx' --image-id yyy --scale ios_2x -o ./ios_2x
+lh-design download-slices 'https://lanhuapp.com/web/#/item/project/stage?tid=xxx&pid=xxx' --image-id yyy --scale ios_3x -o ./ios_3x
 ```
+
+### Android 同学
+
+Android 资源使用 `android_*`：
+
+```bash
+lh-design download-slices 'https://lanhuapp.com/web/#/item/project/stage?tid=xxx&pid=xxx' --image-id yyy --scale android_mdpi -o ./drawable-mdpi
+lh-design download-slices 'https://lanhuapp.com/web/#/item/project/stage?tid=xxx&pid=xxx' --image-id yyy --scale android_xhdpi -o ./drawable-xhdpi
+lh-design download-slices 'https://lanhuapp.com/web/#/item/project/stage?tid=xxx&pid=xxx' --image-id yyy --scale android_xxhdpi -o ./drawable-xxhdpi
+```
+
+## Cursor 中使用
+
+### 方式一：CLI
+
+让 Cursor Agent 使用 `lh-design` 命令即可。适合最轻量的团队用法：
+
+```text
+用 lh-design 读取这个蓝湖设计稿的切图：<蓝湖URL>
+image_id 是 yyy。我是 iOS/Web/Android，请下载对应倍率资源。
+```
+
+### 方式二：Cursor Skill
+
+仓库内提供了模板：
+
+```text
+cursor-skills/lanhu-design/SKILL.md
+```
+
+复制到个人 Cursor skills：
+
+```bash
+mkdir -p ~/.cursor/skills/lanhu-design
+cp cursor-skills/lanhu-design/SKILL.md ~/.cursor/skills/lanhu-design/SKILL.md
+```
+
+之后在 Cursor 里提到“蓝湖设计稿 / 切图 / UI稿 / iOS @2x / Android drawable / Web 2x”等场景，AI 会优先按该 skill 使用 `lh-design`。
+
+### 方式三：Cursor MCP
+
+安装 MCP 依赖后，本项目提供 `lh-design-mcp`：
+
+```bash
+pip install -e .[mcp]
+lh-design-mcp --help
+```
+
+#### stdio 配置
+
+推荐给 Cursor 使用 stdio。复制 `examples/cursor-mcp.stdio.json` 到 Cursor MCP 配置，并把路径换成你本机实际路径：
+
+```json
+{
+  "mcpServers": {
+    "lanhu-design-reader": {
+      "command": "/absolute/path/to/lanhu-design-reader/.venv/bin/lh-design-mcp",
+      "args": [],
+      "env": {
+        "LANHU_COOKIE": "your_lanhu_cookie_here"
+      }
+    }
+  }
+}
+```
+
+#### HTTP 配置
+
+也可以手动启动 HTTP MCP：
+
+```bash
+LANHU_COOKIE='你的蓝湖 Cookie' lh-design-mcp --transport http --host 127.0.0.1 --port 8001
+```
+
+Cursor MCP 配置：
+
+```json
+{
+  "mcpServers": {
+    "lanhu-design-reader": {
+      "url": "http://127.0.0.1:8001/mcp"
+    }
+  }
+}
+```
+
+MCP 工具包含：
+
+- `lanhu_get_designs`
+- `lanhu_get_design_slices`
+- `lanhu_download_slices`
+- `lanhu_get_sketch_json`
+- `lanhu_get_schema_json`
 
 ## Python 用法
 

@@ -1,6 +1,7 @@
 import argparse
 import asyncio
 import json
+import sys
 from pathlib import Path
 
 from .client import LanhuDesignClient
@@ -50,7 +51,7 @@ async def _run(args) -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(prog="lanhu-design-reader")
+    parser = argparse.ArgumentParser(prog=Path(sys.argv[0]).name)
     parser.add_argument("--cookie", help="Lanhu cookie. Defaults to LANHU_COOKIE env.")
     parser.add_argument("--dds-cookie", help="DDS cookie. Defaults to DDS_COOKIE or LANHU_COOKIE env.")
 
