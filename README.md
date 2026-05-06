@@ -259,6 +259,12 @@ cursor-skills/lanhu-design/SKILL.md
 cursor-skills/README.md
 ```
 
+如果使用 OpenClaw / ClawHub，可以直接安装已发布版本：
+
+```bash
+openclaw skills install lanhu-design
+```
+
 复制到个人 Cursor skills：
 
 ```bash

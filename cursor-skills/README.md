@@ -143,6 +143,26 @@ Keep cookies out of prompts, screenshots, logs, commits, and issue reports.
 
 ## Install The Skill
 
+### ClawHub / OpenClaw Registry
+
+The skill is published on ClawHub as:
+
+```text
+lanhu-design@1.0.0
+```
+
+Install from OpenClaw:
+
+```bash
+openclaw skills install lanhu-design
+```
+
+Inspect the published package:
+
+```bash
+clawhub inspect lanhu-design
+```
+
 ### OpenClaw Workspace Skill
 
 Copy the skill folder into an OpenClaw workspace `skills` directory:
