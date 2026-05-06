@@ -9,11 +9,7 @@ description: Read Lanhu UI designs, extract slices, and download Web/iOS/Android
 
 Use the `lh-design` CLI from `xuwenxindeai/lanhu-design-reader`.
 
-If `lh-design` is missing, ask before installing. Prefer the user-level installer so the current project is not polluted:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/xuwenxindeai/lanhu-design-reader/main/install.sh | bash
-```
+If `lh-design` is missing, do not run remote installer commands from this skill. Ask the user to install `lh-design` from the project README, then verify with `lh-design --help`.
 
 The default installer paths are:
 
