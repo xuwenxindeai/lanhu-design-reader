@@ -65,6 +65,24 @@ curl -fsSL https://raw.githubusercontent.com/xuwenxindeai/lanhu-design-reader/ma
 
 ## 安装
 
+### Homebrew
+
+macOS 用户可以通过 Homebrew 安装 CLI：
+
+```bash
+brew install xuwenxindeai/tap/lanhu-design-reader
+```
+
+安装后验证：
+
+```bash
+lh-design --help
+```
+
+> Homebrew 版本默认安装 CLI 入口 `lh-design`。如果需要 Cursor MCP 的 `lh-design-mcp`，继续使用下面的一键脚本并设置 `INSTALL_MCP=1`。
+
+### 一键脚本
+
 推荐安装到用户级目录，不污染业务工程：
 
 ```bash
