@@ -245,12 +245,18 @@ image_id 是 yyy
 
 这是最简单的方式，不需要配置 MCP。
 
-### 方式二：安装 Cursor Skill
+### 方式二：安装 Cursor / OpenClaw Skill
 
 仓库里带了一个 skill 模板：
 
 ```text
 cursor-skills/lanhu-design/SKILL.md
+```
+
+发布说明、安全边界和 OpenClaw 安装方式见：
+
+```text
+cursor-skills/README.md
 ```
 
 复制到个人 Cursor skills：
@@ -261,6 +267,13 @@ cp cursor-skills/lanhu-design/SKILL.md ~/.cursor/skills/lanhu-design/SKILL.md
 ```
 
 之后你在 Cursor 里说“蓝湖设计稿”“切图”“UI稿”“iOS @2x”“Android drawable”“Web 2x”等，AI 会更容易自动使用 `lh-design`。
+
+复制到 OpenClaw workspace skills：
+
+```bash
+mkdir -p ./skills
+cp -R cursor-skills/lanhu-design ./skills/lanhu-design
+```
 
 ### 方式三：配置 Cursor MCP
 

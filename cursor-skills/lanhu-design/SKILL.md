@@ -9,21 +9,26 @@ description: Read Lanhu UI designs, extract slices, and download Web/iOS/Android
 
 Use the `lh-design` CLI from `xuwenxindeai/lanhu-design-reader`.
 
-If missing, ask to install:
+If `lh-design` is missing, ask before installing. Prefer the user-level installer so the current project is not polluted:
 
 ```bash
-git clone https://github.com/xuwenxindeai/lanhu-design-reader.git
-cd lanhu-design-reader
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -e .[mcp]
+curl -fsSL https://raw.githubusercontent.com/xuwenxindeai/lanhu-design-reader/main/install.sh | bash
 ```
 
-The user must provide `LANHU_COOKIE` via env or `.env`.
+The default installer paths are:
+
+```text
+Source: ~/.lanhu-design-reader/src
+Virtualenv: ~/.lanhu-design-reader/venv
+Config: ~/.lanhu-design-reader/.env
+Command: ~/.local/bin/lh-design
+```
+
+The user must provide `LANHU_COOKIE` via shell env, a local `.env`, or `~/.lanhu-design-reader/.env`. If DDS schema reads need a separate login state, use `DDS_COOKIE`.
 
 ## Workflow
 
-1. Parse the user's Lanhu URL and identify `image_id`.
+1. Parse the user's Lanhu URL and identify `image_id`. If the URL already includes `image_id` or `docId`, `--image-id` may be omitted.
 2. Inspect slices first:
 
 ```bash
@@ -51,6 +56,7 @@ Android:
 
 ```bash
 lh-design download-slices '<Lanhu URL>' --image-id <image_id> --scale android_mdpi -o drawable-mdpi
+lh-design download-slices '<Lanhu URL>' --image-id <image_id> --scale android_hdpi -o drawable-hdpi
 lh-design download-slices '<Lanhu URL>' --image-id <image_id> --scale android_xhdpi -o drawable-xhdpi
 lh-design download-slices '<Lanhu URL>' --image-id <image_id> --scale android_xxhdpi -o drawable-xxhdpi
 lh-design download-slices '<Lanhu URL>' --image-id <image_id> --scale android_xxxhdpi -o drawable-xxxhdpi
@@ -60,6 +66,6 @@ lh-design download-slices '<Lanhu URL>' --image-id <image_id> --scale android_xx
 
 - Web uses `1x/2x/3x`, not `ios_*`.
 - iOS uses `ios_2x/ios_3x`.
-- Android uses `android_*`.
+- Android uses `android_mdpi/android_hdpi/android_xhdpi/android_xxhdpi/android_xxxhdpi`.
 - For Photoshop uploads, `base_size` equals iOS `@2x` / Android `xhdpi`.
 - Prefer `slices.json` as the source of truth before renaming or moving assets.
